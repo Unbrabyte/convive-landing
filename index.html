@@ -216,15 +216,14 @@
       border: 0;
     }
 
-    /* Reveal on scroll */
-    .reveal {
+    /* Reveal on scroll — progressive enhancement (visible by default) */
+    .reveal { transition: opacity 0.7s ease, transform 0.7s ease; }
+    .js-on .reveal:not(.visible) {
       opacity: 0;
       transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    @media (prefers-reduced-motion: reduce) {
+      .js-on .reveal:not(.visible) { opacity: 1; transform: none; }
     }
 
     /* Divider */
@@ -731,7 +730,8 @@
   </footer>
 
   <script>
-    // Scroll reveal
+    document.documentElement.classList.add('js-on');
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -739,11 +739,14 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-    // Year
+    setTimeout(() => {
+      document.querySelectorAll('.reveal:not(.visible)').forEach((el) => el.classList.add('visible'));
+    }, 2500);
+
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
