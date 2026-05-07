@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convive — Software de gestión de consorcios</title>
+  <meta name="description" content="Convive: la plataforma que unifica expensas, pagos, reclamos y comunicación de tu consorcio. Diseñado para Uruguay, con Mercado Pago incluido." />
+  <meta property="og:title" content="Convive — Administrá tu edificio sin el caos" />
+  <meta property="og:description" content="Software de gestión de consorcios para Uruguay. Expensas, pagos online y comunicación en una sola plataforma." />
+  <meta property="og:image" content="assets/convive-logo-full-4x_1.png" />
+
+  <link rel="icon" type="image/png" href="assets/convive-logo.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,500;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --bg-card: #131329;
+      --bg-card-hover: #181838;
+      --border: #232347;
+      --accent: #6366f1;
+      --accent-soft: #818cf8;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --text: #e5e7f0;
+      --text-muted: #9ca3b8;
+      --text-dim: #6b7290;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .font-serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    .accent-italic {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      color: var(--accent-soft);
+      font-weight: 500;
+    }
+
+    /* Background dot pattern (matches PDF) */
+    .dot-grid {
+      background-image: radial-gradient(circle, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* Radial glow */
+    .hero-glow {
+      background: radial-gradient(ellipse at 50% 30%, rgba(99, 102, 241, 0.18) 0%, transparent 60%);
+    }
+    .section-glow {
+      background: radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+    }
+
+    /* Card style */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Pill/badge */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: var(--accent-soft);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* CTA button */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05) inset, 0 8px 24px -8px rgba(99, 102, 241, 0.6);
+    }
+    .btn-primary:hover {
+      background: #7c7ff5;
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 12px 32px -8px rgba(99, 102, 241, 0.8);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.25s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    /* Logo lockup */
+    .logo-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .logo-lockup img { height: 22px; width: auto; }
+    .logo-lockup span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    /* Feature dot */
+    .feature-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Stat box */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1;
+      background: linear-gradient(135deg, #a5a8ff, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Chip */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: var(--accent-soft);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Top nav */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(10, 10, 26, 0.7);
+      border-bottom: 1px solid rgba(35, 35, 71, 0.5);
+    }
+
+    /* Video frame */
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 80px -20px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(99, 102, 241, 0.1);
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* Quote block */
+    .quote {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(99, 102, 241, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      padding: 32px 36px;
+    }
+
+    /* Replace list rows */
+    .replace-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px dashed rgba(35, 35, 71, 0.6);
+    }
+    .replace-row:last-child { border-bottom: none; }
+    .replace-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.1);
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="top-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="assets/convive-logo.png" alt="Convive" class="h-7 w-auto" />
+        <span class="font-serif text-xl font-semibold">Convive</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 text-sm text-[color:var(--text-muted)]">
+        <a href="#video" class="hover:text-white transition">Demo</a>
+        <a href="#que-es" class="hover:text-white transition">¿Qué es?</a>
+        <a href="#expensas" class="hover:text-white transition">Expensas</a>
+        <a href="#comunicacion" class="hover:text-white transition">Comunicación</a>
+        <a href="#admins" class="hover:text-white transition">Administradores</a>
+      </nav>
+      <a href="#cta" class="btn-primary text-sm" style="padding: 10px 20px;">Empezar</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 dot-grid opacity-60"></div>
+    <div class="absolute inset-0 hero-glow"></div>
+    <div class="relative max-w-5xl mx-auto px-6 pt-24 pb-32 text-center">
+      <div class="logo-lockup mb-12">
+        <img src="assets/convive-logo.png" alt="Convive icon" />
+        <span>Convive</span>
+      </div>
+
+      <div class="mb-8">
+        <span class="pill">Software de gestión de consorcios</span>
+      </div>
+
+      <h1 class="font-serif text-5xl md:text-7xl font-bold leading-[1.05] mb-8 tracking-tight">
+        Administrá tu edificio<br />
+        <span class="accent-italic">sin el caos.</span>
+      </h1>
+
+      <p class="text-lg md:text-xl text-[color:var(--text-muted)] max-w-2xl mx-auto mb-12 leading-relaxed">
+        Expensas, pagos, reclamos y comunicación — todo en un lugar.
+        Diseñado para que el administrador trabaje menos y los vecinos estén más tranquilos.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4 mb-16">
+        <a href="#cta" class="btn-primary">
+          Conocé Convive
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href="#video" class="btn-secondary">
+          Ver demo
+        </a>
+      </div>
+
+      <div class="flex justify-center">
+        <div class="w-px h-16 bg-gradient-to-b from-transparent via-[color:var(--border)] to-transparent"></div>
+      </div>
+
+      <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-4 mt-8 text-sm text-[color:var(--text-muted)]">
+        <span class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--accent)]"></span>
+          Uruguay
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--accent)]"></span>
+          Web
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--accent)]"></span>
+          Mercado Pago incluido
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section id="video" class="relative py-24 px-6">
+    <div class="absolute inset-0 section-glow"></div>
+    <div class="relative max-w-5xl mx-auto reveal">
+      <div class="text-center mb-12">
+        <span class="pill mb-6 inline-flex">Demo en video</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight">
+          Mirá Convive <span class="accent-italic">en acción.</span>
+        </h2>
+        <p class="text-[color:var(--text-muted)] mt-4 max-w-2xl mx-auto">
+          Un recorrido por las funcionalidades principales — el panel del administrador y la app del propietario.
+        </p>
+      </div>
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/3Sei3PtJgWs?rel=0&modestbranding=1"
+          title="Convive — Demo del software de gestión de consorcios"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider max-w-5xl mx-auto"></div>
+
+  <!-- ¿QUÉ ES CONVIVE? -->
+  <section id="que-es" class="relative py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal mb-14">
+        <span class="pill mb-6 inline-flex">Para admins y propietarios</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          El software que tu consorcio<br />
+          <span class="accent-italic">estaba esperando.</span>
+        </h2>
+        <div class="mt-4 w-16 h-1 bg-[color:var(--accent)] rounded-full"></div>
+        <p class="mt-8 text-lg text-[color:var(--text-muted)] max-w-3xl leading-relaxed">
+          Convive es la plataforma que unifica todo lo que necesita un consorcio: el admin gestiona desde su panel,
+          el propietario ve todo desde su celular. Sin papeles, sin grupos de WhatsApp caóticos, sin confusiones.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 reveal">
+        <div class="card p-8">
+          <div class="text-3xl mb-4">🏢</div>
+          <h3 class="font-serif text-2xl font-semibold mb-3">Para el administrador</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            Gestioná expensas, cobros, gastos y comunicaciones de todos tus edificios en un solo panel profesional.
+          </p>
+        </div>
+        <div class="card p-8">
+          <div class="text-3xl mb-4">📱</div>
+          <h3 class="font-serif text-2xl font-semibold mb-3">Para el propietario</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            Tu saldo, tus pagos, los comunicados del edificio y tus reclamos — todo en el celular, siempre a mano.
+          </p>
+        </div>
+        <div class="card p-8">
+          <div class="text-3xl mb-4">🤝</div>
+          <h3 class="font-serif text-2xl font-semibold mb-3">Para todos</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            Menos conflictos, más transparencia. Todo queda registrado, visible y trazable para cuando haga falta.
+          </p>
+        </div>
+      </div>
+
+      <!-- LO QUE CONVIVE REEMPLAZA -->
+      <div class="mt-16 card p-10 reveal">
+        <div class="text-xs font-semibold tracking-[0.2em] text-[color:var(--accent-soft)] mb-6">
+          LO QUE CONVIVE REEMPLAZA
+        </div>
+        <div class="grid md:grid-cols-2 gap-x-12">
+          <div>
+            <div class="replace-row">
+              <div class="replace-icon">📋</div>
+              <div class="pt-1">Planillas de Excel que siempre fallan</div>
+            </div>
+            <div class="replace-row">
+              <div class="replace-icon">💸</div>
+              <div class="pt-1">Pagos por transferencia sin control</div>
+            </div>
+            <div class="replace-row">
+              <div class="replace-icon">📄</div>
+              <div class="pt-1">Liquidaciones manuales con errores</div>
+            </div>
+          </div>
+          <div>
+            <div class="replace-row">
+              <div class="replace-icon">💬</div>
+              <div class="pt-1">Grupos de WhatsApp imposibles de ordenar</div>
+            </div>
+            <div class="replace-row">
+              <div class="replace-icon">📞</div>
+              <div class="pt-1">Llamados para saber si pagaron o no</div>
+            </div>
+            <div class="replace-row">
+              <div class="replace-icon">🗂</div>
+              <div class="pt-1">Reclamos olvidados que nadie siguió</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider max-w-5xl mx-auto"></div>
+
+  <!-- EXPENSAS Y PAGOS -->
+  <section id="expensas" class="relative py-24 px-6">
+    <div class="absolute inset-0 section-glow"></div>
+    <div class="relative max-w-6xl mx-auto">
+      <div class="reveal mb-14">
+        <span class="pill mb-6 inline-flex">Módulo financiero</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          Cobrar nunca fue<br />
+          <span class="accent-italic">tan fácil.</span>
+        </h2>
+        <div class="mt-4 w-16 h-1 bg-[color:var(--accent)] rounded-full"></div>
+      </div>
+
+      <!-- Highlight card -->
+      <div class="card p-10 mb-12 reveal" style="border-color: rgba(99, 102, 241, 0.3);">
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+          <div class="text-4xl flex-shrink-0">🧾</div>
+          <div>
+            <h3 class="font-serif text-2xl md:text-3xl font-semibold mb-3">
+              Generá y enviá expensas <span class="accent-italic">en minutos</span>
+            </h3>
+            <p class="text-[color:var(--text-muted)] leading-relaxed text-lg">
+              Ingresás los gastos del mes, Convive calcula lo que le corresponde a cada unidad, genera los
+              comprobantes en PDF y los manda por WhatsApp. Todo automático. Todo en orden.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features grid -->
+      <div class="grid md:grid-cols-2 gap-x-12 gap-y-2 reveal">
+        <div class="flex gap-4 py-5 border-b border-[color:var(--border)]">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">Liquidación automática</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Distribuye gastos por unidad sin que hagas cuentas.</p>
+          </div>
+        </div>
+        <div class="flex gap-4 py-5 border-b border-[color:var(--border)]">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">PDF instantáneo</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Comprobantes listos para enviar o imprimir al instante.</p>
+          </div>
+        </div>
+        <div class="flex gap-4 py-5 border-b border-[color:var(--border)]">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">Envío masivo por WhatsApp</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Un clic y todos los propietarios reciben su expensa.</p>
+          </div>
+        </div>
+        <div class="flex gap-4 py-5 border-b border-[color:var(--border)]">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">Historial completo</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Todos los períodos, todas las unidades. Siempre accesible.</p>
+          </div>
+        </div>
+        <div class="flex gap-4 py-5">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">Control de deudores</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Sabés quién debe, cuánto y desde cuándo. En tiempo real.</p>
+          </div>
+        </div>
+        <div class="flex gap-4 py-5">
+          <div class="feature-dot"></div>
+          <div>
+            <h4 class="font-semibold mb-1">Soporte UYU</h4>
+            <p class="text-[color:var(--text-muted)] text-sm">Moneda y formato uruguayo nativos.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mercado Pago block -->
+      <div class="mt-16 card p-10 reveal" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(99, 102, 241, 0.03)); border-color: rgba(99, 102, 241, 0.35);">
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+          <div class="text-4xl flex-shrink-0">💳</div>
+          <div class="flex-1">
+            <h3 class="font-serif text-2xl md:text-3xl font-semibold mb-3">
+              Cobros online con <span class="accent-italic">Mercado Pago</span>
+            </h3>
+            <p class="text-[color:var(--text-muted)] leading-relaxed text-lg mb-6">
+              El propietario entra a la app, ve su expensa y paga en segundos con tarjeta, transferencia o saldo.
+              El sistema registra el pago automáticamente. Cero fricción, cero llamadas.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <span class="chip">Tarjeta de crédito</span>
+              <span class="chip">Transferencia</span>
+              <span class="chip">Conciliación automática</span>
+              <span class="chip">Notificación al pagar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider max-w-5xl mx-auto"></div>
+
+  <!-- COMUNICACIÓN -->
+  <section id="comunicacion" class="relative py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal mb-14">
+        <span class="pill mb-6 inline-flex">Comunidad del consorcio</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          Tu edificio siempre<br />
+          <span class="accent-italic">conectado.</span>
+        </h2>
+        <div class="mt-4 w-16 h-1 bg-[color:var(--accent)] rounded-full"></div>
+        <p class="mt-8 text-lg text-[color:var(--text-muted)] max-w-3xl leading-relaxed">
+          Los conflictos en los consorcios casi siempre nacen por falta de información.
+          Convive pone fin al "nadie me avisó" y al "ese reclamo nunca llegó".
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 reveal">
+        <div class="card p-7">
+          <div class="text-2xl mb-3">📢</div>
+          <h3 class="font-semibold text-lg mb-2">Comunicados oficiales</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            Publicá avisos que todos los propietarios ven al instante en su app. Sin que se pierdan en un grupo de chat.
+          </p>
+        </div>
+        <div class="card p-7">
+          <div class="text-2xl mb-3">🔧</div>
+          <h3 class="font-semibold text-lg mb-2">Reclamos con seguimiento</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            El vecino carga el reclamo, el admin lo ve, actualiza el estado y el vecino recibe notificación. Ninguno se pierde.
+          </p>
+        </div>
+        <div class="card p-7">
+          <div class="text-2xl mb-3">🗳</div>
+          <h3 class="font-semibold text-lg mb-2">Encuestas y votaciones</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            ¿Hay que tomar una decisión? Mandá una encuesta y tenés los resultados al toque. Sin reuniones presenciales.
+          </p>
+        </div>
+        <div class="card p-7">
+          <div class="text-2xl mb-3">🛠</div>
+          <h3 class="font-semibold text-lg mb-2">Directorio de prestadores</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            El plomero, el electricista, el cerrajero — todos en un directorio compartido y accesible para todos los vecinos.
+          </p>
+        </div>
+        <div class="card p-7 md:col-span-2">
+          <div class="text-2xl mb-3">💬</div>
+          <h3 class="font-semibold text-lg mb-2">WhatsApp automático</h3>
+          <p class="text-[color:var(--text-muted)] leading-relaxed">
+            Expensas, avisos y recordatorios llegan por WhatsApp con plantillas configuradas. Sin copiar y pegar nada.
+          </p>
+        </div>
+      </div>
+
+      <div class="quote mt-12 reveal">
+        <p class="font-serif italic text-xl md:text-2xl leading-relaxed mb-4">
+          "El propietario deja de llamar al admin para preguntar si pagó. El admin deja de responder mensajes a las 11 de la noche."
+        </p>
+        <div class="text-xs font-semibold tracking-[0.2em] text-[color:var(--accent-soft)]">
+          — DISEÑADO PARA LA TRANQUILIDAD DE TODOS
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider max-w-5xl mx-auto"></div>
+
+  <!-- PARA ADMINISTRADORES -->
+  <section id="admins" class="relative py-24 px-6">
+    <div class="absolute inset-0 section-glow"></div>
+    <div class="relative max-w-6xl mx-auto">
+      <div class="reveal mb-14">
+        <span class="pill mb-6 inline-flex">Gestión profesional</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          Para el admin que quiere<br />
+          <span class="accent-italic">crecer, no hundirse en papeles.</span>
+        </h2>
+        <div class="mt-4 w-16 h-1 bg-[color:var(--accent)] rounded-full"></div>
+        <p class="mt-8 text-lg text-[color:var(--text-muted)] max-w-3xl leading-relaxed">
+          Convive se adapta a tu cartera, no al revés. Manejá uno o veinte edificios con la misma facilidad.
+          Todo trazable, todo auditable, todo en orden.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid md:grid-cols-3 gap-5 mb-16 reveal">
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <p class="text-[color:var(--text-muted)] mt-3">Edificios gestionados desde un solo panel</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <p class="text-[color:var(--text-muted)] mt-3">Trazabilidad de cada cambio realizado</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2</div>
+          <p class="text-[color:var(--text-muted)] mt-3">Paneles: Admin completo + Portal del vecino</p>
+        </div>
+      </div>
+
+      <!-- Features list -->
+      <div class="space-y-1 reveal">
+        <div class="flex gap-5 py-6 border-b border-[color:var(--border)]">
+          <div class="text-2xl flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(99, 102, 241, 0.1);">🏙</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-lg mb-1">Multi-consorcio</h3>
+            <p class="text-[color:var(--text-muted)]">Cambiá de edificio con un clic. Sin cerrar sesión, sin confundirte entre consorcios.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 py-6 border-b border-[color:var(--border)]">
+          <div class="text-2xl flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(99, 102, 241, 0.1);">🏦</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-lg mb-1">Conciliación bancaria</h3>
+            <p class="text-[color:var(--text-muted)]">Importá el extracto del banco y Convive cruza automáticamente los pagos. Cero horas de revisión manual.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 py-6 border-b border-[color:var(--border)]">
+          <div class="text-2xl flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(99, 102, 241, 0.1);">📊</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-lg mb-1">Reportes listos para la asamblea</h3>
+            <p class="text-[color:var(--text-muted)]">Recaudación, deudores, gastos del período — generá el informe en segundos y presentalo con confianza.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 py-6">
+          <div class="text-2xl flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(99, 102, 241, 0.1);">🔒</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-lg mb-1">Audit log completo</h3>
+            <p class="text-[color:var(--text-muted)]">Cada cambio queda registrado: quién, qué y cuándo. Ante cualquier disputa, la verdad está en el sistema.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="cta" class="relative py-32 px-6">
+    <div class="absolute inset-0 dot-grid opacity-50"></div>
+    <div class="absolute inset-0 hero-glow"></div>
+    <div class="relative max-w-3xl mx-auto text-center reveal">
+      <div class="logo-lockup mb-12">
+        <img src="assets/convive-logo.png" alt="Convive icon" />
+        <span>Convive</span>
+      </div>
+
+      <div class="w-24 h-px bg-[color:var(--border)] mx-auto mb-12"></div>
+
+      <h2 class="font-serif text-5xl md:text-6xl font-bold leading-[1.05] mb-10">
+        Empezá hoy.<br />
+        Tu consorcio lo <span class="accent-italic">agradece.</span>
+      </h2>
+
+      <p class="text-lg text-[color:var(--text-muted)] max-w-2xl mx-auto mb-12 leading-relaxed">
+        Demo sin costo, configuración en minutos, soporte real desde el primer día.
+        No necesitás saber de tecnología para usar Convive — está hecho para personas, no para ingenieros.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <a href="mailto:hola@convive.uy?subject=Quiero%20probar%20Convive" class="btn-primary">
+          Pedir demo gratis
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href="https://wa.me/598?text=Hola%20quiero%20info%20de%20Convive" class="btn-secondary">
+          Escribir por WhatsApp
+        </a>
+      </div>
+
+      <div class="w-24 h-px bg-[color:var(--border)] mx-auto"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[color:var(--border)] py-12 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-[color:var(--text-dim)]">
+      <div class="flex items-center gap-2">
+        <img src="assets/convive-logo.png" alt="Convive" class="h-6 w-auto opacity-80" />
+        <span class="font-serif text-base text-[color:var(--text-muted)]">Convive</span>
+      </div>
+      <div>Software de gestión de consorcios — Uruguay</div>
+      <div>© <span id="year">2026</span> Convive. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
