@@ -748,15 +748,36 @@
         No necesitás saber de tecnología para usar Convive — está hecho para personas, no para ingenieros.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-4 mb-12">
-        <a href="mailto:info@unbrabyte.com?subject=Quiero%20probar%20Convive" class="btn-primary">
-          Pedir demo gratis
-          <span aria-hidden="true">→</span>
-        </a>
-        <a href="https://wa.me/59899028390?text=Hola%20quiero%20info%20de%20Convive" class="btn-secondary">
-          Escribir por WhatsApp
-        </a>
+      <!-- Contact Form -->
+      <div id="conviveFormSuccess" style="display:none; padding:24px; border:1px solid var(--accent); border-radius:12px; margin-bottom:24px;">
+        <div style="font-size:2rem; margin-bottom:8px;">✓</div>
+        <h3 style="font-size:1.25rem; font-weight:700; color:#fff; margin-bottom:4px;">Mensaje enviado</h3>
+        <p style="color:var(--text-muted);">Gracias por tu interés. Nos ponemos en contacto pronto.</p>
       </div>
+      <div id="conviveFormError" style="display:none; padding:12px; border:1px solid #ef4444; border-radius:8px; margin-bottom:16px; color:#ef4444;">
+        Hubo un error al enviar. Por favor intentá de nuevo.
+      </div>
+      <form id="conviveForm" class="text-left" style="max-width:480px; margin:0 auto 24px;">
+        <div style="margin-bottom:16px;">
+          <label for="convive-name" style="display:block; font-size:0.875rem; color:var(--text-muted); margin-bottom:6px;">Nombre</label>
+          <input type="text" id="convive-name" name="name" required placeholder="Tu nombre" style="width:100%; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:0.95rem;" />
+        </div>
+        <div style="margin-bottom:16px;">
+          <label for="convive-email" style="display:block; font-size:0.875rem; color:var(--text-muted); margin-bottom:6px;">Email</label>
+          <input type="email" id="convive-email" name="email" required placeholder="tu@email.com" style="width:100%; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:0.95rem;" />
+        </div>
+        <div style="margin-bottom:16px;">
+          <label for="convive-message" style="display:block; font-size:0.875rem; color:var(--text-muted); margin-bottom:6px;">Mensaje <span style="opacity:0.5;">(opcional)</span></label>
+          <textarea id="convive-message" name="message" rows="4" placeholder="Contanos sobre tu consorcio o preguntanos lo que quieras" style="width:100%; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:0.95rem; resize:vertical;"></textarea>
+        </div>
+        <button type="submit" id="conviveSubmitBtn" class="btn-primary" style="width:100%; padding:14px; font-size:1rem; cursor:pointer;">
+          Pedir demo gratis <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:24px;">
+        ¿Preferís WhatsApp? <a href="https://wa.me/59899028390?text=Hola%20quiero%20info%20de%20Convive" style="color:var(--accent-soft); text-decoration:underline;">Escribinos directo</a>
+      </p>
 
       <div class="w-24 h-px bg-[color:var(--border)] mx-auto"></div>
     </div>
@@ -812,16 +833,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Track "Pedir demo gratis" (email)
-  document.querySelectorAll('a[href^="mailto:"]').forEach(function(el) {
-    el.addEventListener('click', function() {
-      gtag('event', 'demo_request_click', {
+  // Track contact form submission
+  var conviveForm = document.getElementById('conviveForm');
+  if (conviveForm) {
+    conviveForm.addEventListener('submit', function() {
+      gtag('event', 'form_submission', {
         event_category: 'conversion',
-        event_label: 'email_demo',
+        event_label: 'demo_form',
         landing: 'convive'
       });
     });
-  });
+  }
 
   // Track "Escribir por WhatsApp"
   document.querySelectorAll('a[href*="wa.me"]').forEach(function(el) {
@@ -833,6 +855,54 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+});
+</script>
+
+<!-- Contact Form Handler -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.getElementById('conviveForm');
+  var successEl = document.getElementById('conviveFormSuccess');
+  var errorEl = document.getElementById('conviveFormError');
+  var submitBtn = document.getElementById('conviveSubmitBtn');
+
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      var data = {
+        name: form.querySelector('#convive-name').value,
+        email: form.querySelector('#convive-email').value,
+        message: form.querySelector('#convive-message').value || 'Sin mensaje',
+        _subject: 'Demo Convive — ' + form.querySelector('#convive-name').value,
+        _captcha: 'false'
+      };
+
+      try {
+        var res = await fetch('https://formsubmit.co/ajax/info@unbrabyte.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        var result = await res.json();
+        if (result.success === 'true' || res.ok) {
+          form.style.display = 'none';
+          successEl.style.display = 'block';
+        } else {
+          errorEl.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Pedir demo gratis <span aria-hidden="true">→</span>';
+        }
+      } catch (err) {
+        errorEl.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Pedir demo gratis <span aria-hidden="true">→</span>';
+      }
+    });
+  }
 });
 </script>
 
