@@ -1,0 +1,24 @@
+{
+  "name": "convive-landing",
+  "version": "1.0.0",
+  "description": "Landing page para **Convive**, software de gestión de consorcios para Uruguay.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unbrabyte/convive-landing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Unbrabyte/convive-landing/issues"
+  },
+  "homepage": "https://github.com/Unbrabyte/convive-landing#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
