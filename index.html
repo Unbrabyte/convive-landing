@@ -761,5 +761,43 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
+<!-- GA4 Event Tracking -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Track "Empezar" / "Conocé Convive" CTA clicks
+  document.querySelectorAll('a[href="#cta"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      gtag('event', 'cta_click', {
+        event_category: 'conversion',
+        event_label: el.textContent.trim(),
+        landing: 'convive'
+      });
+    });
+  });
+
+  // Track "Pedir demo gratis" (email)
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      gtag('event', 'demo_request_click', {
+        event_category: 'conversion',
+        event_label: 'email_demo',
+        landing: 'convive'
+      });
+    });
+  });
+
+  // Track "Escribir por WhatsApp"
+  document.querySelectorAll('a[href*="wa.me"]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      gtag('event', 'whatsapp_contact', {
+        event_category: 'conversion',
+        event_label: 'whatsapp_click',
+        landing: 'convive'
+      });
+    });
+  });
+});
+</script>
+
 </body>
 </html>
