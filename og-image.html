@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0a0a1a;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .bg-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.16) 0%, rgba(99,102,241,0.04) 50%, transparent 70%);
+    top: -120px;
+    right: -80px;
+    pointer-events: none;
+  }
+  .bg-glow-2 {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 70%);
+    bottom: -180px;
+    left: -30px;
+    pointer-events: none;
+  }
+  .border-line {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(99,102,241,0.12);
+    pointer-events: none;
+  }
+  .accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+  }
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 80px;
+  }
+  .logo-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: #6366f1;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  h1 {
+    font-size: 72px;
+    font-weight: 800;
+    color: #e0e0ff;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  h1 span {
+    background: linear-gradient(135deg, #c7d2fe, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  p.subtitle {
+    font-size: 26px;
+    color: rgba(255,255,255,0.50);
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .footer {
+    position: absolute;
+    bottom: 36px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255,255,255,0.28);
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+  <div class="border-line"></div>
+  <div class="accent-bar"></div>
+  <div class="content">
+    <div class="logo-icon">C</div>
+    <h1><span>Convive</span></h1>
+    <p class="subtitle">Software de gestión de consorcios</p>
+  </div>
+  <div class="footer">by Unbrabyte</div>
+</body>
+</html>
