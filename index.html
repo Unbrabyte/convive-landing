@@ -874,21 +874,21 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.textContent = 'Enviando...';
 
       var data = {
+        access_key: 'c1873c90-a887-4753-b76b-1ba587b358f8',
         name: form.querySelector('#convive-name').value,
         email: form.querySelector('#convive-email').value,
         message: form.querySelector('#convive-message').value || 'Sin mensaje',
-        _subject: 'Demo Convive — ' + form.querySelector('#convive-name').value,
-        _captcha: 'false'
+        subject: 'Demo Convive — ' + form.querySelector('#convive-name').value
       };
 
       try {
-        var res = await fetch('https://formsubmit.co/ajax/info@unbrabyte.com', {
+        var res = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(data)
         });
         var result = await res.json();
-        if (result.success === 'true' || res.ok) {
+        if (result.success) {
           form.style.display = 'none';
           successEl.style.display = 'block';
         } else {
