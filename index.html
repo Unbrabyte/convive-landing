@@ -326,6 +326,13 @@
 </head>
 <body>
 
+<!-- Cookie Consent Banner -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;color:#ccc;padding:14px 24px;font-size:0.85rem;z-index:99999;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-family:Inter,sans-serif;">
+  <span>Este sitio usa cookies y herramientas de análisis para mejorar tu experiencia. <a href="/privacidad.html" style="color:#7c8aff;text-decoration:underline;">Política de privacidad</a></span>
+  <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('cookieOk','1');" style="background:#7c8aff;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:0.85rem;">Aceptar</button>
+</div>
+<script>if(!localStorage.getItem('cookieOk'))document.getElementById('cookieBanner').style.display='flex';</script>
+
   <!-- TOP NAV -->
   <header class="top-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -814,6 +821,9 @@
       <div>© <span id="year">2026</span> Convive. Todos los derechos reservados.</div>
       <div><a href="https://unbrabyte.com" target="_blank" rel="noopener">Un producto de unbraByte</a></div>
     </div>
+<div style="text-align:center;padding:8px 0 16px;">
+  <a href="/privacidad.html" style="color:#888;text-decoration:underline;font-size:0.8rem;">Privacidad</a> · <a href="/terminos.html" style="color:#888;text-decoration:underline;font-size:0.8rem;">Términos</a>
+</div>
   </footer>
 
   <script>
@@ -848,6 +858,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event_label: el.textContent.trim(),
         landing: 'convive'
       });
+      if (typeof fbq === 'function') fbq('track', 'ViewContent', { content_name: 'cta_section', landing: 'convive' });
     });
   });
 
@@ -860,6 +871,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event_label: 'demo_form',
         landing: 'convive'
       });
+      if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'demo_form', landing: 'convive' });
     });
   }
 
@@ -871,6 +883,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event_label: 'whatsapp_click',
         landing: 'convive'
       });
+      if (typeof fbq === 'function') fbq('track', 'Contact', { content_name: 'whatsapp', landing: 'convive' });
     });
   });
 });
